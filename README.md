@@ -7,12 +7,14 @@ TODO : Explication du projet ici
 Récupérer le projet :
 
 ```bash
-$ git clone https://github.com/Oipnet/360-dev.git && cd 360-dev
+$ git clone https://github.com/360WebDev/website.git && cd 360-dev
 ```
 Installer les dépendances : 
 
 ```bash
 $ composer install -o
+// ou
+$ make install
 ```
 
 Paramétrer le fichier .env (à adapter  suivant votre environement) :
