@@ -41,12 +41,12 @@ class UsersController extends Controller
 	public function update(Request $request, DiscordService $discord, RoleRepository $roleRepository): RedirectResponse
 	{
 	    $discord_id = $request->input('discord_id') ?? null;
-        $data       = [];
+		$data       = [];
         if ($discord_id) {
-            $memberRoles = $discord->getMemberRoles($discord_id);
+			$memberRoles = $discord->getMemberRoles($discord_id);
             if (in_array('@admin', $memberRoles)) {
-                $role_admin      = $roleRepository->getBySlug('admin');
-                $data['role_id'] = $role_admin->id;
+				$role_admin      = $roleRepository->getBySlug('admin');
+				$data['role_id'] = $role_admin->id;
             }
         }
         if ($discord_id && $request->has('use_discord')) {

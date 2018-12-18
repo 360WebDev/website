@@ -21,16 +21,21 @@ class RoleRepository extends Repository
 	}
 
 	/**
+	 * Retreives the role by slug, if not slug in the bdd => create default role who is member
+	 *
 	 * @param string $slug
-	 * @return \Illuminate\Database\Eloquent\Collection|Model
+	 * @return Role|null
 	 */
-	public function getBySlug(string $slug)
+	public function getBySlug(string $slug): ?Role
 	{
-		return $this->model->newQuery()->where('slug', $slug)->firstOrCreate([
-			'name'        => 'member',
-			'slug'        => self::DEFAULT_ROLE,
-			'description' => 'The default user role'
-		]);
+		if ($this->model->newQuery()->get()->count() === 0) {
+			$this->model->newQuery()->create([
+				'name'        => 'member',
+				'slug'        => self::DEFAULT_ROLE,
+				'description' => 'The default user role'
+			]);
+		}
+		return $this->model->newQuery()->where('slug', $slug)->first();
 	}
 
 }
