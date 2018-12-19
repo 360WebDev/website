@@ -14,102 +14,101 @@ use Kris\LaravelFormBuilder\FormBuilder;
 abstract class AdminController extends Controller
 {
 
-	/**
-	 * @var FormBuilder
-	 */
-	private $formBuilder;
+    /**
+     * @var FormBuilder
+     */
+    private $formBuilder;
 
-	/**
-	 * @var string
-	 */
-	protected $routePrefix;
+    /**
+     * @var string
+     */
+    protected $routePrefix;
 
-	/**
-	 * @var string
-	 */
-	protected $formClass;
+    /**
+     * @var string
+     */
+    protected $formClass;
 
-	/**
-	 * PostsController constructor
-	 *
-	 * @param FormBuilder $formBuilder
-	 */
-	public function __construct(FormBuilder $formBuilder)
-	{
-		$this->formBuilder = $formBuilder;
-	}
+    /**
+     * PostsController constructor
+     *
+     * @param FormBuilder $formBuilder
+     */
+    public function __construct(FormBuilder $formBuilder)
+    {
+        $this->formBuilder = $formBuilder;
+    }
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 * @throws \Exception
-	 */
-	public function create(): Response
-	{
-		return $this->renderWithForm('create');
-	}
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     * @throws \Exception
+     */
+    public function create(): Response
+    {
+        return $this->renderWithForm('create');
+    }
 
-	/**
-	 * @param string $view The vies name of action (ex: create, update etc.)
-	 * @return Response
-	 * @throws \Exception
-	 */
-	protected function renderWithForm(string $view): Response
-	{
-		$view = 'admin.' . $this->routePrefix . '.' . $view;
-		return response()->view($view, ['form' => $this->getForm()]);
-	}
+    /**
+     * @param string $view The vies name of action (ex: create, update etc.)
+     * @return Response
+     * @throws \Exception
+     */
+    protected function renderWithForm(string $view): Response
+    {
+        $view = 'admin.' . $this->routePrefix . '.' . $view;
+        return response()->view($view, ['form' => $this->getForm()]);
+    }
 
-	/**
-	 * @param string|object $model
-	 * @param string[] $data
-	 * @return Form
-	 * @throws \Exception
-	 */
-	protected function getForm($model = null, array $data = []): Form
-	{
-		$mainModel = $this->getMainModel();
-		$model     = $model ?: new $mainModel();
-		return $this->formBuilder->create($this->formClass, array_merge(['model' => $model], $data));
-	}
+    /**
+     * @param string|object $model
+     * @param string[] $data
+     * @return Form
+     * @throws \Exception
+     */
+    protected function getForm($model = null, array $data = []): Form
+    {
+        $mainModel = $this->getMainModel();
+        $model     = $model ?: new $mainModel();
+        return $this->formBuilder->create($this->formClass, array_merge(['model' => $model], $data));
+    }
 
-	/**
-	 * Get model for the called controller
-	 *
-	 * @return string The model
-	 * @throws \Exception
-	 */
-	private function getMainModel(): string
-	{
-		$controllerParts = explode('\\', get_called_class());
-		$controller      = end($controllerParts);
-		$model           = 'App\\Model\\' . Str::singular(str_replace('Controller', '', $controller));
-		if (!class_exists($model)) {
-			throw new \Exception("Model $model  does not exist");
-		}
-		return $model;
-	}
+    /**
+     * Get model for the called controller
+     *
+     * @return string The model
+     * @throws \Exception
+     */
+    private function getMainModel(): string
+    {
+        $controllerParts = explode('\\', get_called_class());
+        $controller      = end($controllerParts);
+        $model           = 'App\\Model\\' . Str::singular(str_replace('Controller', '', $controller));
+        if (!class_exists($model)) {
+            throw new \Exception("Model $model  does not exist");
+        }
+        return $model;
+    }
 
-	/**
-	 * @return string
-	 * @throws \Exception
-	 */
-	public function getFormClass(): string
-	{
-		if (!class_exists($this->formClass)) {
-			throw new \Exception("Form class {$this->formClass}  does not exist");
-		}
-		return $this->formClass;
-	}
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getFormClass(): string
+    {
+        if (!class_exists($this->formClass)) {
+            throw new \Exception("Form class {$this->formClass}  does not exist");
+        }
+        return $this->formClass;
+    }
 
-	/**
-	 * @param string $message
-	 * @return RedirectResponse
-	 */
-	protected function redirectToIndex(string $message): RedirectResponse
-	{
-		return redirect(route($this->routePrefix . '.index'))->with('success', $message);
-	}
-
+    /**
+     * @param string $message
+     * @return RedirectResponse
+     */
+    protected function redirectToIndex(string $message): RedirectResponse
+    {
+        return redirect(route($this->routePrefix . '.index'))->with('success', $message);
+    }
 }

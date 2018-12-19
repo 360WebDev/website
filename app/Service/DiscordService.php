@@ -57,5 +57,4 @@ class DiscordService
     {
         return (int) config('discord.guild_id');
     }
-
 }

@@ -59,11 +59,11 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-	/**
-	 * @param User $user
-	 * @return RedirectResponse
-	 * @throws \Exception
-	 */
+    /**
+     * @param User $user
+     * @return RedirectResponse
+     * @throws \Exception
+     */
     public function destroy(User $user): RedirectResponse
     {
         if ($user->delete()) {
