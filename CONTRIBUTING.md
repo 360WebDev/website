@@ -1,13 +1,21 @@
 # Conventions de commits
 
-TAG #issues_number description in english
+<type>(sujet)
 
-Remplacer TAG par :
+* Type définit le type de commit
+    * build: Système de build (example : gulp, webpack, npm)
+    * ci: Intégration continue (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+    * docs: Documentation
+    * feat: Ajout d'une fonctionnalité
+    * fix: Correction de bogue
+    * perf: Amélioration des performances
+    * refactor: Changement du code qui ne change rien au fonctionnement
+    * style: Changement du style du code (sans changer la logique)
+    * test: Modification des tests
 
-* ADD adding new feature
-* FIX fixes a bug
-* IMP improve something that worked but not in all situations
-* To complete...
+* Sujet : Description de la fonctionnalité.
+
+exemple: `feat(add space member)`    
 
 # Conventions de codage :
 
