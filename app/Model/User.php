@@ -9,8 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-	use HasFavorites;
-	use Notifiable;
+    use HasFavorites;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -34,23 +34,23 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-	/**
-	 * @return BelongsTo
-	 */
-	public function role(): BelongsTo
-	{
-		return $this->belongsTo(Role::class);
-	}
+    /**
+     * @return BelongsTo
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getRole(): string
-	{
-		return $this->role ? $this->role->name : '';
-	}
+    /**
+     * @return string
+     */
+    public function getRole(): string
+    {
+        return $this->role ? $this->role->name : '';
+    }
 
-	public function setDiscordIdAttribute($value)
+    public function setDiscordIdAttribute($value)
     {
         $this->attributes['discord_id'] = intval($value);
     }
@@ -72,11 +72,11 @@ class User extends Authenticatable
         return $this->role->slug === $role;
     }
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     */
     public function getDiscordId(): ?string
-	{
-		return $this->getAttribute('discord_id') ?? null;
-	}
+    {
+        return $this->getAttribute('discord_id') ?? null;
+    }
 }

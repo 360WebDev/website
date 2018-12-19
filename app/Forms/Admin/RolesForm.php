@@ -7,22 +7,22 @@ namespace App\Forms\Admin;
 class RolesForm extends AdminForm
 {
 
-	/**
-	 * @var string
-	 */
-	protected $routePrefixName = 'roles';
+    /**
+     * @var string
+     */
+    protected $routePrefixName = 'roles';
 
     public function buildForm()
     {
-    	parent::buildForm();
+        parent::buildForm();
         $this
             ->add('name', 'text')
             ->add('slug', 'text')
-			->add('description', 'textarea');
+            ->add('description', 'textarea');
 
-		$this->add('submit', 'submit', [
-			'label' => 'Ajouter le role',
-			'attr'  => ['class' => 'btn btn waves-effect waves-light']
-		]);
+        $this->add('submit', 'submit', [
+            'label' => 'Ajouter le role',
+            'attr'  => ['class' => 'btn btn waves-effect waves-light']
+        ]);
     }
 }

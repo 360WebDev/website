@@ -68,44 +68,44 @@ class Post extends Model
         return Markdown::defaultTransform($this->getAttribute('content'));
     }
 
-	/**
-	 * @param UploadedFile|string $image
-	 * @param null|string $type
-	 * @return string
-	 */
+    /**
+     * @param UploadedFile|string $image
+     * @param null|string $type
+     * @return string
+     */
     public function getImageName($image, ?string $type = null): string
-	{
-		if (is_string($image)) {
-			return $image;
-		}
-		$type = $type ? '-' . $type : '';
-		return $this->id . $type . '.' . $image->clientExtension();
-	}
+    {
+        if (is_string($image)) {
+            return $image;
+        }
+        $type = $type ? '-' . $type : '';
+        return $this->id . $type . '.' . $image->clientExtension();
+    }
 
-	/**
-	 * @param null|string $type
-	 * @return string Return the image with the full path (/../public/posts/1.png)
-	 */
-	public function getImage(?string $type = null): ?string
-	{
-		if ($this->image) {
-			$fileName = $type
-				? $this->id . '-' . $type . '.' . pathinfo($this->image, PATHINFO_EXTENSION)
-				: $this->image;
-			return '/posts/' . $fileName;
-		}
-		return null;
-	}
+    /**
+     * @param null|string $type
+     * @return string Return the image with the full path (/../public/posts/1.png)
+     */
+    public function getImage(?string $type = null): ?string
+    {
+        if ($this->image) {
+            $fileName = $type
+                ? $this->id . '-' . $type . '.' . pathinfo($this->image, PATHINFO_EXTENSION)
+                : $this->image;
+            return '/posts/' . $fileName;
+        }
+        return null;
+    }
 
 
-	/**
-	 * @return bool
-	 */
-	public function favorited(): bool
-	{
-		return (bool)
-			Favorite::where('user_id', Auth::id())
-				->where('post_id', $this->id)
-				->first();
-	}
+    /**
+     * @return bool
+     */
+    public function favorited(): bool
+    {
+        return (bool)
+            Favorite::where('user_id', Auth::id())
+                ->where('post_id', $this->id)
+                ->first();
+    }
 }

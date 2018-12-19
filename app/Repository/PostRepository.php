@@ -12,55 +12,54 @@ use Illuminate\Database\Query\Builder;
 class PostRepository extends Repository
 {
 
-	/**
-	 * @var Post
-	 */
-	protected $model;
+    /**
+     * @var Post
+     */
+    protected $model;
 
-	public function __construct(Post $post)
-	{
-		$this->model = $post;
-	}
+    public function __construct(Post $post)
+    {
+        $this->model = $post;
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Collection|static[]
-	 */
-	public function getByOrderDesc(): Collection
-	{
-		return $this->model->newQuery()->orderBy('created_at', 'desc')->get();
-	}
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getByOrderDesc(): Collection
+    {
+        return $this->model->newQuery()->orderBy('created_at', 'desc')->get();
+    }
 
-	/**
-	 * @param int $id
-	 * @return Model|Post
-	 */
-	public function getFirst(int $id): Model
-	{
-		return $this->model->newQuery()->findOrFail($id);
-	}
+    /**
+     * @param int $id
+     * @return Model|Post
+     */
+    public function getFirst(int $id): Model
+    {
+        return $this->model->newQuery()->findOrFail($id);
+    }
 
-	/**
-	 * @param array $data
-	 * @return int
-	 */
-	public function update(array $data)
-	{
-		return $this->model->newQuery()->update($data);
-	}
+    /**
+     * @param array $data
+     * @return int
+     */
+    public function update(array $data)
+    {
+        return $this->model->newQuery()->update($data);
+    }
 
-	/**
-	 * @param int|null $categoryId
-	 * @return Builder
-	 */
-	public function findIsOnline(?int $categoryId = null)
-	{
-		$resultQuery = $this->model->newQuery()->with('category', 'user')
-			->where('online', true)
-			->orderBy('created_at', 'desc');
-		if ($categoryId) {
-			return $resultQuery->where('category_id', $categoryId);
-		}
-		return $resultQuery;
-	}
-
+    /**
+     * @param int|null $categoryId
+     * @return Builder
+     */
+    public function findIsOnline(?int $categoryId = null)
+    {
+        $resultQuery = $this->model->newQuery()->with('category', 'user')
+            ->where('online', true)
+            ->orderBy('created_at', 'desc');
+        if ($categoryId) {
+            return $resultQuery->where('category_id', $categoryId);
+        }
+        return $resultQuery;
+    }
 }

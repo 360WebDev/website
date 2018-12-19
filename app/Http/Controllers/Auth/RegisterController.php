@@ -31,21 +31,21 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
 
-	/**
-	 * @var RoleRepository
-	 */
-	private $roleRepository;
+    /**
+     * @var RoleRepository
+     */
+    private $roleRepository;
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @param RoleRepository $roleRepository
-	 */
+    /**
+     * Create a new controller instance.
+     *
+     * @param RoleRepository $roleRepository
+     */
     public function __construct(RoleRepository $roleRepository)
     {
         $this->middleware('guest');
-		$this->roleRepository = $roleRepository;
-	}
+        $this->roleRepository = $roleRepository;
+    }
 
     /**
      * Get a validator for an incoming registration request.
@@ -71,16 +71,16 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $roleMember = $this->roleRepository->getBySlug('membre');
-    	if ($roleMember) {
-    		$data['role_id'] = $roleMember->id;
-		} else {
-			$data['role_id'] = 0;
-		}
+        if ($roleMember) {
+            $data['role_id'] = $roleMember->id;
+        } else {
+            $data['role_id'] = 0;
+        }
         return User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => bcrypt($data['password']),
-			'role_id'  => $data['role_id'],
+            'role_id'  => $data['role_id'],
         ]);
     }
 }

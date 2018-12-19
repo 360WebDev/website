@@ -20,14 +20,14 @@ use Kris\LaravelFormBuilder\FormBuilder;
 class PostsController extends AdminController
 {
 
-	protected $routePrefix = 'posts';
+    protected $routePrefix = 'posts';
 
-	protected $formClass = PostsForm::class;
+    protected $formClass = PostsForm::class;
 
-	/**
-	 * @param PostRepository $postRepository
-	 * @return Response
-	 */
+    /**
+     * @param PostRepository $postRepository
+     * @return Response
+     */
     public function index(PostRepository $postRepository): Response
     {
         $posts = $postRepository->getByOrderDesc();
@@ -35,30 +35,30 @@ class PostsController extends AdminController
     }
 
 
-	/**
-	 * @param Request $request
-	 * @param PostRepository $postRepository
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
+    /**
+     * @param Request $request
+     * @param PostRepository $postRepository
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request, PostRepository $postRepository)
     {
-		$post = $postRepository->save($this->getData($request));
-		if ($post) {
-			if ($request->hasFile('image_file')) {
-				$imageFile = $request->file('image_file');
-				$imageFile->move('posts', $post->getImageName($imageFile));
-			}
-			return redirect(route('posts.index'))->with('success', "L'article a bien été ajouté");
+        $post = $postRepository->save($this->getData($request));
+        if ($post) {
+            if ($request->hasFile('image_file')) {
+                $imageFile = $request->file('image_file');
+                $imageFile->move('posts', $post->getImageName($imageFile));
+            }
+            return redirect(route('posts.index'))->with('success', "L'article a bien été ajouté");
         }
         return redirect()->back();
     }
 
-	/**
-	 * @param int $id
-	 * @param PostRepository $postRepository
-	 * @return Response
-	 * @throws \Exception
-	 */
+    /**
+     * @param int $id
+     * @param PostRepository $postRepository
+     * @return Response
+     * @throws \Exception
+     */
     public function edit(int $id, PostRepository $postRepository): Response
     {
         $post = $postRepository->getFirst($id);
@@ -66,28 +66,28 @@ class PostsController extends AdminController
         return response()->view('admin.posts.edit', compact('post', 'form'));
     }
 
-	/**
-	 * @param Request $request
-	 * @param Post $post
-	 * @return View
-	 */
+    /**
+     * @param Request $request
+     * @param Post $post
+     * @return View
+     */
     public function update(Request $request, Post $post)
     {
-		if ($post->update($this->getData($request))) {
-			if ($request->hasFile('image_file')) {
-				$imageFile = $request->file('image_file');
-				$imageFile->move('posts', $post->getImageName($imageFile));
-			}
-			return redirect(route('posts.index'))->with('success', "L'article a bien été édité");
-		}
-		return redirect()->back();
+        if ($post->update($this->getData($request))) {
+            if ($request->hasFile('image_file')) {
+                $imageFile = $request->file('image_file');
+                $imageFile->move('posts', $post->getImageName($imageFile));
+            }
+            return redirect(route('posts.index'))->with('success', "L'article a bien été édité");
+        }
+        return redirect()->back();
     }
 
-	/**
-	 * @param Post $post
-	 * @return RedirectResponse
-	 * @throws \Exception
-	 */
+    /**
+     * @param Post $post
+     * @return RedirectResponse
+     * @throws \Exception
+     */
     public function destroy(Post $post): RedirectResponse
     {
         if ($post->delete()) {
@@ -96,12 +96,12 @@ class PostsController extends AdminController
         return redirect(route('posts.index'))->with('error', "L'article n'a pas pu être supprimé.");
     }
 
-	/**
-	 * @param Request $request
-	 * @return array
-	 */
+    /**
+     * @param Request $request
+     * @return array
+     */
     private function getData(Request $request): array
-	{
-		return array_merge($request->all(), ['image' => $request->file('image_file') ?? null]);
-	}
+    {
+        return array_merge($request->all(), ['image' => $request->file('image_file') ?? null]);
+    }
 }
