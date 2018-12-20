@@ -1,5 +1,7 @@
 # Projet 360° Dev
 
+[![Build Status](https://travis-ci.org/360WebDev/website.svg?branch=master)](https://travis-ci.org/360WebDev/website)
+
 TODO : Explication du projet ici
 
 # Installation
