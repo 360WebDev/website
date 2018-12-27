@@ -12,20 +12,28 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        Role::create([
+        $roles = new \Illuminate\Database\Eloquent\Collection();
+
+        $roles->add(Role::create(
             [
                 'name'         => 'user',
-                'slug'         => 'Simple user',
+                'slug'         => 'simple-user',
                 'description'  => 'Just a simple user'
-            ], [
-                'name'         => 'moderator',
-                'slug'         => 'Moderator',
-                'description'  => 'User can moderate comments and forum'
-            ], [
-                'name'         => 'admin',
-                'slug'         => 'Admin',
-                'description'  => 'User can moderate all and can write/edit post'
             ]
-        ]);
+        ));
+        $roles->add(Role::create([
+            'name'         => 'moderator',
+            'slug'         => 'moderator',
+            'description'  => 'User can moderate comments and forum'
+        ]));
+        $roles->add(Role::create([
+            'name'         => 'admin',
+            'slug'         => 'admin',
+            'description'  => 'User can moderate all and can write/edit post'
+        ]));
+
+        $roles->each(function($role) {
+            $role->users()->saveMany(factory(\App\Model\User::class, 5)->create());
+        });
     }
 }

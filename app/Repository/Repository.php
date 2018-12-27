@@ -29,6 +29,7 @@ abstract class Repository
      */
     public function save(array $data): Model
     {
+        dd($data);
         return $this->model->newQuery()->create($data);
     }
 }
