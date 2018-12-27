@@ -1,6 +1,8 @@
 <?php
 
 use App\Model\Role;
+use App\Model\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 
 class RoleTableSeeder extends Seeder
@@ -12,7 +14,7 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        $roles = new \Illuminate\Database\Eloquent\Collection();
+        $roles = new Collection();
 
         $roles->add(Role::create(
             [
@@ -33,7 +35,7 @@ class RoleTableSeeder extends Seeder
         ]));
 
         $roles->each(function($role) {
-            $role->users()->saveMany(factory(\App\Model\User::class, 5)->create());
+            $role->users()->saveMany(factory(User::class, 5)->create());
         });
     }
 }
