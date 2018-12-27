@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Events\PostCreated;
 use App\Forms\Admin\PostsForm;
 use App\Http\Controllers\Controller;
 use App\Model\Post;
@@ -9,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Kris\LaravelFormBuilder\Form;
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -48,8 +50,12 @@ class PostsController extends AdminController
                 $imageFile = $request->file('image_file');
                 $imageFile->move('posts', $post->getImageName($imageFile));
             }
+
+            event(new PostCreated($post));
+
             return redirect(route('posts.index'))->with('success', "L'article a bien été ajouté");
         }
+
         return redirect()->back();
     }
 
