@@ -9,11 +9,16 @@
                 <div class="card-body">
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
+                        @if(session()->has('login_error'))
+                            <div class="alert alert-success">
+                                {{ session()->get('login_error') }}
+                            </div>
+                        @endif
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <input id="email" placeholder="Adresse email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
-                            @if ($errors->has('email'))
+                            <input id="identity" placeholder="Adresse email ou nom d'utilisateur" type="text" class="form-control" name="identity" value="{{ old('identity') }}" required autofocus>
+                            @if ($errors->has('identity'))
                                 <span class="help-block">
-                                    <strong>{{ $errors->first('email') }}</strong>
+                                    <strong>{{ $errors->first('identity') }}</strong>
                                 </span>
                             @endif
                         </div>

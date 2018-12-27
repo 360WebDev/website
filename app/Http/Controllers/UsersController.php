@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repository\RoleRepository;
-use App\Service\DiscordService;
+use App\Services\DiscordService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

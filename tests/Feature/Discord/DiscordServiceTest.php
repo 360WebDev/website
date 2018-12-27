@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Discord;
 
-use App\Service\DiscordService;
+use App\Services\DiscordService;
 use PHPUnit\Framework\MockObject\MockObject;
 use RestCord\DiscordClient;
 use RestCord\Model\Guild\Guild;
