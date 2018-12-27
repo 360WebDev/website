@@ -12,7 +12,8 @@
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "michelf/php-markdown": "^1.7",
-        "restcord/restcord": "^0.3.0"
+        "restcord/restcord": "^0.3.0",
+        "spatie/laravel-medialibrary": "^7.5"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
