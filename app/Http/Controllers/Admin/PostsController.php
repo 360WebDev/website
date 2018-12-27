@@ -51,7 +51,6 @@ class PostsController extends AdminController
                 $imageFile->move('posts', $post->getImageName($imageFile));
             }
 
-            Log::debug("Admin post controller");
             event(new PostCreated($post));
 
             return redirect(route('posts.index'))->with('success', "L'article a bien été ajouté");
