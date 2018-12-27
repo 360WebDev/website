@@ -112,6 +112,13 @@ class Post extends Model
                 ->first();
     }
 
+    /**
+     * Add order by created at
+     *
+     * @param Builder $query
+     * @param string $order
+     * @return Builder
+     */
     public function scopeOrderByCreatedAt(Builder $query, string $order = 'desc') : Builder
     {
         return $query->orderBy('created_at', $order);
