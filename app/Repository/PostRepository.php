@@ -27,7 +27,7 @@ class PostRepository extends Repository
      */
     public function getByOrderDesc(): Collection
     {
-        return $this->model->newQuery()->orderBy('created_at', 'desc')->get();
+        return $this->model->with('user')->orderBy('created_at', 'desc')->get();
     }
 
     /**
