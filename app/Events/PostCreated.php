@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 class PostCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
     /**
      * @var Post
      */

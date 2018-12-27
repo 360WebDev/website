@@ -33,8 +33,14 @@ abstract class Repository
         return $this->model->newQuery()->create($data);
     }
 
-    public function count(): int {
-        $count = Cache::get($this->model->getTable().'_count', function() {
+    /**
+     * Count elements
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        $count = Cache::get($this->model->getTable().'_count', function () {
             return $this->model->count();
         });
 
