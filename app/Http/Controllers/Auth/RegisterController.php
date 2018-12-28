@@ -76,11 +76,18 @@ class RegisterController extends Controller
         } else {
             $data['role_id'] = 0;
         }
-        return User::create([
+
+        $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => bcrypt($data['password']),
             'role_id'  => $data['role_id'],
         ]);
+
+        if (isset($data['avatar'])) {
+            $user->addMediaFromRequest('avatar')->toMediaCollection('avatars');
+        }
+
+        return $user;
     }
 }
