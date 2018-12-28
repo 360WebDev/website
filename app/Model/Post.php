@@ -6,6 +6,7 @@ use App\Favorite\Favorite;
 use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -20,6 +21,8 @@ class Post extends Model
 
 
     protected $fillable = ['name', 'slug', 'image', 'content', 'category_id', 'user_id', 'online'];
+
+    protected $with = ['user'];
 
     /**
      * @return BelongsTo
@@ -107,5 +110,17 @@ class Post extends Model
             Favorite::where('user_id', Auth::id())
                 ->where('post_id', $this->id)
                 ->first();
+    }
+
+    /**
+     * Add order by created at
+     *
+     * @param Builder $query
+     * @param string $order
+     * @return Builder
+     */
+    public function scopeOrderByCreatedAt(Builder $query, string $order = 'desc') : Builder
+    {
+        return $query->orderBy('created_at', $order);
     }
 }

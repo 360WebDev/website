@@ -6,18 +6,22 @@ use App\Favorite\HasFavorites;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\Models\Media;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use HasFavorites;
     use Notifiable;
+    use HasMediaTrait;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'role_id', 'discord_id', 'avatar', 'username'];
+    protected $fillable = ['name', 'email', 'password', 'role_id', 'discord_id', 'username'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -78,5 +82,12 @@ class User extends Authenticatable
     public function getDiscordId(): ?string
     {
         return $this->getAttribute('discord_id') ?? null;
+    }
+
+    public function registerMediaConversions(Media $media = null) : void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(50)
+            ->height(50);
     }
 }
