@@ -17,6 +17,14 @@
                                 </span>
                             @endif
                         </div>
+                        <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
+                            <input id="username" placeholder="Username" type="text" class="form-control" name="username" value="{{ old('username') }}" required>
+                            @if ($errors->has('username'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('username') }}</strong>
+                                </span>
+                            @endif
+                        </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <input id="email" placeholder="Email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>

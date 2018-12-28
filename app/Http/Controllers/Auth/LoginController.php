@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Model\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -52,5 +53,34 @@ class LoginController extends Controller
             return redirect()->route('home.index')->with('success', 'Vous êtes connecté maître.');
         }
         return redirect()->route('home.index')->with('success', 'Vous êtes connecté.');
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        $identity = request()->get('identity');
+
+        $fieldName = filter_var($identity, FILTER_VALIDATE_EMAIL) ? 'email':'username';
+        request()->merge([$fieldName => $identity]);
+
+        return $fieldName;
+    }
+
+    /**
+     * @param Request $request
+     * @throws ValidationException
+     */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $request->session()->put('login_error', trans('auth.failed'));
+        throw ValidationException::withMessages(
+            [
+                'error' => [trans('auth.failed')],
+            ]
+        );
     }
 }
