@@ -11,6 +11,9 @@ before_script:
   - composer install --no-interaction
   - php artisan key:generate
 
+before_install:
+  - cd src
+
 install: travis_retry composer install --no-interaction --prefer-source
 
 script: vendor/bin/phpunit --verbose

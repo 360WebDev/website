@@ -1,0 +1,50 @@
+version: '3'
+services:
+  php:
+    container_name: 360_php
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        USER_UID: 1000
+    volumes:
+      - ./src:/var/www/html
+    links:
+      - db
+    networks:
+          - 360-network
+
+  nginx:
+    container_name: 360_nginx
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/logs:/var/log/nginx
+    ports:
+      - 8080:80
+    links:
+      - php
+    networks:
+      - 360-network
+
+  db:
+    image: mariadb:latest
+    container_name: 360_db
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/database/data:/var/lib/mysql
+      - ./docker/database/provision:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: eeJizah1
+      MYSQL_USER: 360_dev
+      MYSQL_PASSWORD: FjXS3YN7
+      MYSQL_DATABASE: 360_dev
+    networks:
+      - 360-network
+
+
+networks:
+    360-network:
+        driver: bridge
