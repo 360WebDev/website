@@ -6,13 +6,14 @@
         <div class="col s12">
             <h1>Les articles</h1>
             <a class="btn-floating btn-large waves-effect waves-light darken-2" href="{{ route('posts.create') }}"><i class="material-icons">add</i></a>
-            <table>
+            <table class="highlight">
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Titre</th>
                     <th>URL</th>
                     <th>Auteur</th>
+                    <th>Status</th>
                     <th>En ligne ?</th>
                     <th>Actions</th>
                 </tr>
@@ -25,6 +26,7 @@
                         <td><a href="{{ route('posts.edit', ['id' => $post->id]) }}">{{ $post->name }}</a></td>
                         <td>{{ $post->slug }}</td>
                         <td>{{ $post->user->name }}</td>
+                        <td><span>{{ $post->status }}</td>
                         <td>{{ $post->getOnlineToString() }}</td>
                         <td>
                             <a href="{{ route('posts.edit', ['id' => $post->id]) }}" class="btn waves-effect waves-light">

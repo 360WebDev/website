@@ -3,11 +3,13 @@
 namespace App\Model;
 
 use App\Favorite\Favorite;
+use App\Status;
 use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Michelf\Markdown;
@@ -19,8 +21,7 @@ class Post extends Model
 {
     use HasSlug;
 
-
-    protected $fillable = ['name', 'slug', 'image', 'content', 'category_id', 'user_id', 'online'];
+    protected $fillable = ['name', 'slug', 'image', 'content', 'category_id', 'user_id', 'online', 'status'];
 
     protected $with = ['user'];
 
@@ -111,6 +112,30 @@ class Post extends Model
                 ->where('post_id', $this->id)
                 ->first();
     }
+
+	/**
+	 * @return string
+	 */
+    public function showBadgeToStatus(): string
+	{
+		switch ($this->status) {
+			case Status::ACCEPTED :
+				return 'badge-success';
+				break;
+			case Status::PENDING :
+				return 'badge-warning';
+				break;
+			case Status::REJECT:
+				return 'badge-danger';
+				break;
+			case Status::WRITING:
+				return 'badge-primary';
+				break;
+			default:
+				return 'badge-default';
+				break;
+		}
+	}
 
     /**
      * Add order by created at
