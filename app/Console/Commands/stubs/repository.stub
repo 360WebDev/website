@@ -1,0 +1,27 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyFullModelClass;
+
+/**
+ * App DummyClass
+ */
+class DummyClass extends Repository
+{
+
+    /**
+     * @var DummyShortModelClass
+     */
+    protected $model;
+
+    /**
+     * DummyClass constructor
+     *
+     * @param DummyShortModelClass $dummyModelVariable
+     */
+    public function __construct(DummyShortModelClass $dummyModelVariable)
+    {
+        $this->model = $dummyModelVariable;
+    }
+}
