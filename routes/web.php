@@ -16,11 +16,16 @@ Route::get('/', 'HomeController@index')->name('home.index');
 Route::resource('blog', 'PostsController');
 Route::get('blog/categorie/{slug}', 'PostsController@category')->name('blog.category');
 
-Route::post('favorite/{post}',   'PostsController@favoritePost');
-Route::post('unfavorite/{post}', 'PostsController@unFavoritePost');
-Route::get('/compte/favorites',  'UsersController@myFavorites')->name('user.favorites')->middleware('auth');
-Route::get('/compte',            'UsersController@myAccount')->name('user.account')->middleware('auth');
-Route::put('/compte',            'UsersController@update')->name('user.update')->middleware('auth');
+Route::post('favorite/{post}',     'PostsController@favoritePost');
+Route::post('unfavorite/{post}',   'PostsController@unFavoritePost');
+Route::get('/compte/favorites',    'UsersController@myFavorites')->name('user.favorites')->middleware('auth');
+Route::get('/compte',              'UsersController@myAccount')->name('user.account')->middleware('auth');
+Route::put('/compte',              'UsersController@update')->name('user.update')->middleware('auth');
+Route::get('/compte/mes-articles', 'UsersController@posts')->name('user.posts')->middleware('auth');
+Route::get('/compte/article/nouveau',  'UsersController@addPost')->name('user.add.post')->middleware('auth');
+Route::post('/compte/article/nouveau', 'UsersController@addPost')->name('user.add.post')->middleware('auth');
+Route::get('/compte/article/modifier/{post}', 'UsersController@updatePost')->name('user.update.post')->middleware('auth');
+Route::put('/compte/article/modifier/{post}', 'UsersController@updatePost')->name('user.update.post')->middleware('auth');
 
 // Admin Dashboard
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function () {
