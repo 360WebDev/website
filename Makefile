@@ -19,4 +19,5 @@ ini_env:
 	php artisan key:generate
 
 cln_std:
-	./vendo
+	./vendor/bin/phpcs
+	./vendor/bin/phpcbf
