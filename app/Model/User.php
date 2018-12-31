@@ -32,6 +32,14 @@ class User extends Authenticatable implements HasMedia
      */
     protected $hidden = ['password', 'remember_token',];
 
+	/**
+	 * @var array
+	 */
+    private $conversionsAvatar = [
+		'thumb' => [50,  50],
+		'large' => [150, 150]
+	];
+
     /**
      * @return HasMany
      */
@@ -92,25 +100,29 @@ class User extends Authenticatable implements HasMedia
      */
     public function registerMediaConversions(Media $media = null) : void
     {
-        $this->addMediaConversion('thumb')
-            ->width(50)
-            ->height(50);
+		foreach ($this->conversionsAvatar as $conversion => [$width, $height]) {
+			$this
+				->addMediaConversion($conversion)
+				->width($width)
+				->height($height);
+		}
     }
 
-    /**
-     * Retrieve the link from the user's avatar. If the user has not added his avatar,
-     * define a default avatar managed by the Gravatar service
-     *
-     * @param string $conversionName
-     * @return string
-     */
-    public function getAvatarUrl(string $conversionName = 'thumb'): string
+	/**
+	 * Retrieve the link from the user's avatar. If the user has not added his avatar,
+	 * define a default avatar managed by the Gravatar service
+	 *
+	 * @param string $conversionName
+	 * @param int    $size
+	 * @return string
+	 */
+    public function getAvatarUrl(string $conversionName = 'thumb', int $size = 40): string
     {
-            $mediaCollection = $this->getMedia('avatars');
+		$mediaCollection = $this->getMedia('avatars');
         if (is_null($mediaCollection->first())) {
             $gravatarEmail = md5(strtolower(trim($this->email)));
-            return sprintf('https://www.gravatar.com/avatar/%s?s=%s', $gravatarEmail, 40);
+            return sprintf('https://www.gravatar.com/avatar/%s?s=%s', $gravatarEmail, $size);
         }
-            return $mediaCollection->first()->getUrl($conversionName);
+		return $mediaCollection->first()->getUrl($conversionName);
     }
 }
