@@ -9,15 +9,23 @@ TODO : Explication du projet ici
 Récupérer le projet :
 
 ```bash
-$ git clone https://github.com/360WebDev/website.git && cd 360-dev
+$ git clone https://github.com/360WebDev/website.git 360-dev && cd 360-dev
 ```
 Installer les dépendances : 
 
 ```bash
-$ composer install -o
+$ composer install
 // ou
 $ make install
 ```
+
+## Générer le fichier .env :
+
+```bash
+$ make init_env
+```
+
+Cette commande va vous créer un fichier .env à partir du .env.example et générer une APP_KEY.
 
 Paramétrer le fichier .env (à adapter  suivant votre environement) :
 

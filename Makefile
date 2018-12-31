@@ -9,7 +9,11 @@ vendor: composer.lock
 install: vendor
 
 serve: install
-	php artisan serve	
+	php artisan serve
 
 test:
 	./vendor/bin/phpunit --colors
+
+ini_env:
+	cp .env.example .env
+	php artisan key:generate
