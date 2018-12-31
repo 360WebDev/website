@@ -17,3 +17,7 @@ test:
 ini_env:
 	cp .env.example .env
 	php artisan key:generate
+
+cln_std:
+	./vendor/bin/phpcs
+	./vendor/bin/phpcbf
