@@ -21,7 +21,7 @@
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ auth()->user()->getMedia('avatars')->first()->getUrl('thumb') }}">
+                                <img class="rounded-circle" src="{{ auth()->user()->getAvatarUrl() }}" alt="{{ auth()->user()->name }}">
                                 {{ auth()->user()->name }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">

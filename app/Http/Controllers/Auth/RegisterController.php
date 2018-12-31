@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Model\Role;
 use App\Model\User;
 use App\Http\Controllers\Controller;
 use App\Repository\RoleRepository;
@@ -67,7 +66,7 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\Model\User
+     * @return User
      */
     protected function create(array $data)
     {
@@ -78,6 +77,7 @@ class RegisterController extends Controller
             $data['role_id'] = 0;
         }
 
+        /** @var $user User */
         $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],

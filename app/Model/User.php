@@ -4,8 +4,10 @@ namespace App\Model;
 
 use App\Favorite\HasFavorites;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
@@ -31,9 +33,9 @@ class User extends Authenticatable implements HasMedia
     protected $hidden = ['password', 'remember_token',];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return HasMany
      */
-    public function posts(): BelongsTo
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
     }
@@ -84,10 +86,31 @@ class User extends Authenticatable implements HasMedia
         return $this->getAttribute('discord_id') ?? null;
     }
 
+    /**
+     * @param Media|null $media
+     * @throws InvalidManipulation
+     */
     public function registerMediaConversions(Media $media = null) : void
     {
         $this->addMediaConversion('thumb')
             ->width(50)
             ->height(50);
+    }
+
+    /**
+     * Retrieve the link from the user's avatar. If the user has not added his avatar,
+     * define a default avatar managed by the Gravatar service
+     *
+     * @param string $conversionName
+     * @return string
+     */
+    public function getAvatarUrl(string $conversionName = 'thumb'): string
+    {
+            $mediaCollection = $this->getMedia('avatars');
+        if (is_null($mediaCollection->first())) {
+            $gravatarEmail = md5(strtolower(trim($this->email)));
+            return sprintf('https://www.gravatar.com/avatar/%s?s=%s', $gravatarEmail, 40);
+        }
+            return $mediaCollection->first()->getUrl($conversionName);
     }
 }
