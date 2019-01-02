@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\User;
 use App\Repository\RoleRepository;
 use App\Services\DiscordService;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
 
 /**
  * Class UsersController
@@ -33,13 +36,21 @@ class UsersController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request        $request
      * @param DiscordService $discord
      * @param RoleRepository $roleRepository
+     * @param Guard          $guard
      * @return RedirectResponse
+     * @throws FileCannotBeAdded
      */
-    public function update(Request $request, DiscordService $discord, RoleRepository $roleRepository): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        DiscordService $discord,
+        RoleRepository $roleRepository,
+        Guard $guard
+    ): RedirectResponse {
+        /** @var $user User */
+        $user = $guard->user();
         $discord_id = $request->input('discord_id') ?? null;
         $data       = [];
         if ($discord_id) {
@@ -52,9 +63,11 @@ class UsersController extends Controller
         if ($discord_id && $request->has('use_discord')) {
             $discord_user   = $discord->getUser($discord_id);
             $data['name']   = $discord_user->username;
-            $data['avatar'] = $discord_user->getAvatar();
+            $user
+                ->addMediaFromUrl($discord_user->getAvatar())
+                ->toMediaCollection('avatars');
         }
-        if (Auth::user()->update(array_merge($request->all(), $data))) {
+        if ($user->update(array_merge($request->all(), $data))) {
             return redirect()->route('user.account')->with('success', 'Votre compte a bien été mis à jour');
         }
         return redirect()->back()->with('danger', 'Votre compte n\'a pas pu être à jour.');

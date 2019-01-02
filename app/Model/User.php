@@ -32,13 +32,13 @@ class User extends Authenticatable implements HasMedia
      */
     protected $hidden = ['password', 'remember_token',];
 
-	/**
-	 * @var array
-	 */
+    /**
+     * @var array
+     */
     private $conversionsAvatar = [
-		'thumb' => [40,  40],
-		'large' => [150, 150]
-	];
+        'thumb' => [40,  40],
+        'large' => [150, 150]
+    ];
 
     /**
      * @return HasMany
@@ -100,30 +100,30 @@ class User extends Authenticatable implements HasMedia
      */
     public function registerMediaConversions(Media $media = null) : void
     {
-		foreach ($this->conversionsAvatar as $conversion => [$width, $height]) {
-			$this
-				->addMediaConversion($conversion)
-				->width($width)
-				->height($height);
-		}
+        foreach ($this->conversionsAvatar as $conversion => [$width, $height]) {
+            $this
+                ->addMediaConversion($conversion)
+                ->width($width)
+                ->height($height);
+        }
     }
 
-	/**
-	 * Retrieve the link from the user's avatar. If the user has not added his avatar,
-	 * define a default avatar managed by the Gravatar service
-	 *
-	 * @param string $conversionName
-	 * @param int    $size
-	 * @return string
-	 */
+    /**
+     * Retrieve the link from the user's avatar. If the user has not added his avatar,
+     * define a default avatar managed by the Gravatar service
+     *
+     * @param string $conversionName
+     * @param int    $size
+     * @return string
+     */
     public function getAvatarUrl(string $conversionName = 'thumb'): string
     {
-		$mediaCollection = $this->getMedia('avatars');
+        $mediaCollection = $this->getMedia('avatars');
         if ($mediaCollection->isEmpty()) {
-        	$size = $this->conversionsAvatar[$conversionName][0];
+            $size = $this->conversionsAvatar[$conversionName][0];
             $gravatarEmail = md5(strtolower(trim($this->email)));
             return sprintf('https://www.gravatar.com/avatar/%s?s=%s', $gravatarEmail, $size);
         }
-		return $mediaCollection->first()->getUrl($conversionName);
+        return $mediaCollection->first()->getUrl($conversionName);
     }
 }
