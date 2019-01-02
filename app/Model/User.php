@@ -113,17 +113,15 @@ class User extends Authenticatable implements HasMedia
      * define a default avatar managed by the Gravatar service
      *
      * @param string $conversionName
-     * @param int    $size
      * @return string
      */
     public function getAvatarUrl(string $conversionName = 'thumb'): string
     {
-        $mediaCollection = $this->getMedia('avatars');
-        if ($mediaCollection->isEmpty()) {
+        if ($this->getMedia('avatars')->isEmpty()) {
             $size = $this->conversionsAvatar[$conversionName][0];
             $gravatarEmail = md5(strtolower(trim($this->email)));
             return sprintf('https://www.gravatar.com/avatar/%s?s=%s', $gravatarEmail, $size);
         }
-        return $mediaCollection->first()->getUrl($conversionName);
+        return $this->getFirstMediaUrl('avatars', $conversionName);
     }
 }
