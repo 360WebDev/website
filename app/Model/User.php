@@ -36,7 +36,7 @@ class User extends Authenticatable implements HasMedia
 	 * @var array
 	 */
     private $conversionsAvatar = [
-		'thumb' => [50,  50],
+		'thumb' => [40,  40],
 		'large' => [150, 150]
 	];
 
@@ -116,10 +116,11 @@ class User extends Authenticatable implements HasMedia
 	 * @param int    $size
 	 * @return string
 	 */
-    public function getAvatarUrl(string $conversionName = 'thumb', int $size = 40): string
+    public function getAvatarUrl(string $conversionName = 'thumb'): string
     {
 		$mediaCollection = $this->getMedia('avatars');
-        if (is_null($mediaCollection->first())) {
+        if ($mediaCollection->isEmpty()) {
+        	$size = $this->conversionsAvatar[$conversionName][0];
             $gravatarEmail = md5(strtolower(trim($this->email)));
             return sprintf('https://www.gravatar.com/avatar/%s?s=%s', $gravatarEmail, $size);
         }

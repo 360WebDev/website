@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <img src="{{ $user->getAvatarUrl('thumb', 150) }}" alt="Votre avatar" class="img-fluid rounded-circle">
+                <img src="{{ $user->getAvatarUrl('large') }}" alt="Votre avatar" class="img-fluid rounded-circle">
             </div>
         </div>
         <button class="btn btn-primary" type="submit">Modifer mon compte</button>
