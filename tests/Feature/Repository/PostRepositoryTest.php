@@ -23,7 +23,7 @@ class PostRepositoryTest extends TestCase
 	{
 		factory(Category::class)->create();
 		Role::create(['name' => 'member', 'slug' => 'member', 'description' => 'member']);
-		factory(User::class)->create(['role_id' => Role::first()]);
+		$user = factory(User::class)->create(['role_id' => Role::first()]);
 		factory(User::class)->create();
 		$postRepository = new PostRepository(new Post());
 		$data = [
@@ -35,7 +35,7 @@ class PostRepositoryTest extends TestCase
 			'status' => 'pending',
 			'validated' => true
 		];
-		$post = $postRepository->saveUserPost($data);
+		$post = $postRepository->saveUserPost($data, $user);
 
 		$this->assertEquals('pending', $post->status);
 	}
@@ -43,20 +43,20 @@ class PostRepositoryTest extends TestCase
 	/** @test */
 	public function status_accepted_if_is_admin_role()
 	{
-		factory(Category::class)->create();
+		$category = factory(Category::class)->create();
 		Role::create(['name' => 'admin', 'slug' => 'admin', 'description' => 'admin']);
-		factory(User::class)->create(['role_id' => Role::first()]);
+		$userAdmin = factory(User::class)->create(['role_id' => Role::first()]);
 		factory(User::class)->create();
 		$postRepository = new PostRepository(new Post());
 		$data = [
 			'name' => 'foo',
 			'slug' => 'foo',
 			'content' => 'foobar',
-			'category_id' => Category::first(),
-			'user_id' => User::first(),
+			'category_id' => $category->id,
+			'user_id' => $userAdmin->id,
 			'status' => 'pending'
 		];
-		$post = $postRepository->saveUserPost($data, true);
+		$post = $postRepository->saveUserPost($data, $userAdmin);
 
 		$this->assertEquals('accepted', $post->status);
 	}

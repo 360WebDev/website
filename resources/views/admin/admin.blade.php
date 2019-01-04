@@ -172,6 +172,10 @@
     @if (session()->has('success'))
         <script type="text/javascript">window.FlashMessage.success('{{ session()->get('success') }}')</script>
     @endif
+
+    @if (session()->has('error'))
+        <script type="text/javascript">window.FlashMessage.error('{{ session()->get('error') }}')</script>
+    @endif
     @yield('content')
 </main>
 

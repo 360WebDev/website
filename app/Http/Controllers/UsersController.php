@@ -8,8 +8,7 @@ use App\Notifications\PostAccepted;
 use App\Repository\PostRepository;
 use App\Model\User;
 use App\Repository\RoleRepository;
-use App\Service\DiscordService;
-use App\Status;
+use App\Repository\UserRepository;
 use App\Services\DiscordService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
@@ -30,9 +29,15 @@ class UsersController extends Controller
 	 */
 	private $postRepository;
 
-	public function __construct(PostRepository $postRepository)
+	/**
+	 * @var UserRepository
+	 */
+	private $userRepository;
+
+	public function __construct(PostRepository $postRepository, UserRepository $userRepository)
 	{
 		$this->postRepository = $postRepository;
+		$this->userRepository = $userRepository;
 	}
 
 	/**
@@ -107,10 +112,12 @@ class UsersController extends Controller
 	 */
 	public function addPost(Request $request, FormBuilder $formBuilder)
 	{
-		$form = $formBuilder->create(UserPostForm::class, ['method' => 'POST']);
+		$form = $formBuilder->create(
+			UserPostForm::class, ['method' => 'POST', 'model' => new Post()]
+		);
 		if ($request->method() === 'POST') {
 			$form->redirectIfNotValid();
-			$this->postRepository->saveUserPost($form->getFieldValues(), Auth::user()->isAdmin());
+			$this->postRepository->saveUserPost($form->getFieldValues(), Auth::user());
 			return redirect()
 				->route('user.posts')
 				->with('success', 'Votre article a bien été ajouté. Un admin doit le valider');
@@ -119,21 +126,26 @@ class UsersController extends Controller
 	}
 
 	/**
-	 * @param Post $post
-	 * @param Request $request
+	 * @param Post        $post
+	 * @param Request     $request
 	 * @param FormBuilder $formBuilder
+	 * @param Guard       $guard
 	 * @return Response
 	 */
-	public function updatePost(Post $post, Request $request, FormBuilder $formBuilder)
+	public function updatePost(Post $post, Request $request, FormBuilder $formBuilder, Guard $guard)
 	{
+		/** @var $user User */
+		$user = $guard->user();
 		$form = $formBuilder->create(UserPostForm::class, ['model' => $post, 'method' => 'PUT']);
 		if ($request->getMethod() === 'PUT') {
 			$form->redirectIfNotValid();
-			$this->postRepository->saveUserPost($form->getFieldValues(), Auth::user()->isAdmin(), true);
+			$this->postRepository->saveUserPost($form->getFieldValues(), $user, true);
 			if ($request->exists('validated')) {
 				// Send notification only for admin
-				//$usersAdmin = $this->->findAllAdmin();
-				$post->notify(new PostAccepted($post));
+				$usersAdmin = $this->userRepository->findAllAdmin();
+				$usersAdmin->map(function (User $user) use ($post) {
+					$user->notify(new PostAccepted($post));
+				});
 			}
 			return redirect()
 				->route('user.posts')

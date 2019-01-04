@@ -28,14 +28,33 @@
                                 <a class="dropdown-item" href="{{ route('user.account') }}">Mon compte</a>
                                 <a class="dropdown-item" href="{{ route('user.favorites') }}">Mes favoris</a>
                                 <a class="dropdown-item" href="{{ route('user.posts') }}">Mes articles</a>
+                                <form action="{{ route('logout') }}" class="form-inline" method="post">
+                                    {{ csrf_field() }}
+                                    <button type="submit" href="" class="dropdown-item btn btn-link">Se déconnecter</button>
+                                </form>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <form action="{{ route('logout') }}" class="form-inline" method="post">
-                                {{ csrf_field() }}
-                                <button type="submit" href="" class="btn btn-danger">Se déconnecter</button>
-                            </form>
-                        </li>
+                        @if(auth()->user()->unreadNotifications->isNotEmpty())
+                            <li class="nav-item dropdown mt-2">
+                                <a href="#" class="nav-link dropdown-toggle" id="notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="notifications">
+                                    @foreach(auth()->user()->unreadNotifications as $notification)
+                                        <a href="{{ route('posts.edit', $notification->data['id']) }}" class="dropdown-item">{{ $notification->data['title'] }}</a>
+                                    @endforeach
+                                </div>
+                            </li>
+                        @else
+                            <li class="nav-item dropdown mt-2">
+                                <a href="#" class="nav-link dropdown-toggle" id="empty_notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="far fa-bell"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="empty_notifications">
+                                    <p class="dropdown-item">Toutes les notifications</p>
+                                </div>
+                            </li>
+                        @endif
                     @else
                         <li class="nav-item"><a class="nav-link btn btn-outline-success" href="{{ route('login') }}">Se connecter</a></li>
                         <li class="nav-item"><a class="nav-link btn-outline-default" href="{{ route('register') }}">Créer un compte</a></li>

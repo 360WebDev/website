@@ -3,16 +3,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\PostCreated;
 use App\Forms\Admin\PostsForm;
-use App\Http\Controllers\Controller;
 use App\Model\Post;
 use App\Repository\PostRepository;
+use App\Status;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
-use Kris\LaravelFormBuilder\Form;
-use Kris\LaravelFormBuilder\FormBuilder;
 
 /**
  * Class PostsController
@@ -72,14 +69,20 @@ class PostsController extends AdminController
         return response()->view('admin.posts.edit', compact('post', 'form'));
     }
 
-    /**
-     * @param Request $request
-     * @param Post $post
-     * @return View
-     */
+	/**
+	 * @param Request        $request
+	 * @param Post           $post
+	 * @return View
+	 */
     public function update(Request $request, Post $post)
     {
-        if ($post->update($this->getData($request))) {
+    	$data = $this->getData($request);
+    	if (isset($data['online']) && $data['online'] && ($data['status'] !== Status::ACCEPTED)) {
+			return redirect()
+				->route('posts.index')
+				->with('error', "L'article doit être accepté pour le mettre en ligne.");
+		}
+        if ($post->update($data)) {
             if ($request->hasFile('image_file')) {
                 $imageFile = $request->file('image_file');
                 $imageFile->move('posts', $post->getImageName($imageFile));

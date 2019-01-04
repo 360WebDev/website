@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Michelf\Markdown;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class Post
@@ -67,7 +68,10 @@ class Post extends Model
         return $this->getAttribute('online') ? 'Oui' : 'Non';
     }
 
-    public function getHtmlAttribute()
+	/**
+	 * @return string
+	 */
+    public function getHtmlAttribute(): string
     {
         return Markdown::defaultTransform($this->getAttribute('content'));
     }
@@ -148,4 +152,27 @@ class Post extends Model
     {
         return $query->orderBy('created_at', $order);
     }
+
+	/**
+	 * @return string[]
+	 * @throws ReflectionException
+	 */
+    public function getStatus(): array
+	{
+		$status = [];
+		foreach ((new ReflectionClass(Status::class))->getConstants() as $value) {
+			$status[$value] = $value;
+		}
+		return $status;
+	}
+
+	/**
+	 * true if post status is accpeted
+	 *
+	 * @return bool
+	 */
+	public function statusIsAccepted(): bool
+	{
+		return $this->status === Status::ACCEPTED;
+	}
 }

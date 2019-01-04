@@ -25,7 +25,10 @@ Route::get('/compte/mes-articles', 'UsersController@posts')->name('user.posts')-
 Route::get('/compte/article/nouveau',  'UsersController@addPost')->name('user.add.post')->middleware('auth');
 Route::post('/compte/article/nouveau', 'UsersController@addPost')->name('user.add.post')->middleware('auth');
 Route::get('/compte/article/modifier/{post}', 'UsersController@updatePost')->name('user.update.post')->middleware('auth');
-Route::put('/compte/article/modifier/{post}', 'UsersController@updatePost')->name('user.update.post')->middleware('auth');
+Route::put('/compte/article/modifier/{post}', 'UsersController@updatePost')
+	->name('user.update.post')
+	->middleware('auth')
+	->middleware(\App\Http\Middleware\CheckStatus::class);
 
 // Admin Dashboard
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function () {

@@ -19,7 +19,11 @@
             <tbody>
             @forelse($posts as $post)
                 <tr>
-                    <td><a href="{{ route('user.update.post', $post) }}">{{ $post->name }}</a></td>
+                    @if(!$post->statusIsAccepted() || $post->user()->first()->isAdmin())
+                        <td><a href="{{ route('user.update.post', $post) }}">{{ $post->name }}</a></td>
+                    @else
+                        <td>{{ $post->name }}</td>
+                    @endif
                     <td>{{ $post->slug }}</td>
                     <td><span class="badge {{ $post->showBadgeToStatus() }}">{{ ucfirst($post->status) }}</span></td>
                     <td></td>

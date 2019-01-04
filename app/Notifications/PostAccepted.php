@@ -5,9 +5,11 @@ namespace App\Notifications;
 use App\Model\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
+/**
+ * Class PostAccepted
+ */
 class PostAccepted extends Notification
 {
     use Queueable;
@@ -60,8 +62,12 @@ class PostAccepted extends Notification
     public function toArray($notifiable)
     {
         return [
-            'user_id' => $this->post->user_id,
-			'admin' => $this->post->isAdmin()
+        	'id'     => $this->post->getAttribute('id'),
+        	'title'  => $this->post->getAttribute('name'),
+			'slug'   => $this->post->getAttribute('slug'),
+			'name'   => 'Un nouvel article à valider',
+			'author' => $this->post->user()->first()->username,
+			'status' => $this->post->getAttribute('status')
         ];
     }
 }

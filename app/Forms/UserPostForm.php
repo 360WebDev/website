@@ -4,15 +4,29 @@ namespace App\Forms;
 
 use App\Model\Category;
 use App\Status;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Auth\Guard;
 use Kris\LaravelFormBuilder\Field;
 use Kris\LaravelFormBuilder\Form;
 
 class UserPostForm extends Form
 {
-    public function buildForm()
+
+	/**
+	 * @var Guard
+	 */
+	private $guard;
+
+	/**
+	 * UserPostForm constructor
+	 *
+	 * @param Guard $guard
+	 */
+	public function __construct(Guard $guard)
+	{
+		$this->guard = $guard;
+	}
+
+	public function buildForm()
     {
     	$rules = [
     		'name' => ['rules' => 'required|min:5|max:255'],
@@ -38,7 +52,7 @@ class UserPostForm extends Form
 		]);
 
 		// Display online checkbox only for admin
-		if (Auth::user()->isAdmin()) {
+		if ($this->guard->user()->isAdmin()) {
 			$this->add('online', Field::CHECKBOX, ['label' => 'En ligne ?']);
 		}
 
