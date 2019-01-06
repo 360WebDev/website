@@ -13,9 +13,12 @@
 
 Route::get('/', 'HomeController@index')->name('home.index');
 
+Route::get('blog', 'PostsController@index')->name('blog.index');
+Route::get('blog/{slug}', 'PostsController@show')->name('blog.show');
+Route::post('blog/{slug}', 'CommentsController@store')->name('comment.store')->middleware('auth');
+Route::put('blog/{slug}', 'CommentsController@update')->name('comment.update')->middleware('auth');
+Route::delete('blog/{slug}', 'CommentsController@destroy')->name('comment.destroy')->middleware('auth');
 
-// Blog front routes
-Route::resource('blog', 'PostsController');
 Route::get('blog/categorie/{slug}', 'PostsController@category')->name('blog.category');
 
 // User routes
