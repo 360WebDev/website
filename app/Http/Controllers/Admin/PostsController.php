@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 use App\Events\PostCreated;
 use App\Forms\Admin\PostsForm;
 use App\Model\Post;
+use App\Model\User;
 use App\Repository\PostRepository;
 use App\Status;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -70,12 +72,17 @@ class PostsController extends AdminController
     }
 
 	/**
-	 * @param Request        $request
-	 * @param Post           $post
+	 * @param Request     $request
+	 * @param Guard       $guard
+	 * @param Post        $post
+	 * @param string|null $notification
 	 * @return View
 	 */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Guard $guard, Post $post, string $notification = null)
     {
+    	/** @var $user User */
+    	$user = $guard->user();
+    	$user->markAsReadNotification($notification);
     	$data = $this->getData($request);
     	if (isset($data['online']) && $data['online'] && ($data['status'] !== Status::ACCEPTED)) {
 			return redirect()

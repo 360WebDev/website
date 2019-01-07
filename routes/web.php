@@ -34,6 +34,7 @@ Route::put('/compte/article/modifier/{post}', 'UsersController@updatePost')
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function () {
     Route::get('/', 'DashboardController@index')->name('admin.index');
     Route::resource('posts',      'PostsController');
+    Route::get('/posts/{post}/edit/notification/{notification}', 'PostsController@update')->name('posts.edit.notif');
     Route::resource('categories', 'CategoriesController');
     Route::resource('users',      'UserController');
     Route::resource('roles',      'RoleController');
