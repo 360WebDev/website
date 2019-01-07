@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Favorite\Favorite;
+use App\Status;
 use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Michelf\Markdown;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class Post
@@ -19,8 +22,7 @@ class Post extends Model
 {
     use HasSlug;
 
-
-    protected $fillable = ['name', 'slug', 'image', 'content', 'category_id', 'user_id', 'online'];
+    protected $fillable = ['name', 'slug', 'image', 'content', 'category_id', 'user_id', 'online', 'status'];
 
     protected $with = ['user'];
 
@@ -66,7 +68,10 @@ class Post extends Model
         return $this->getAttribute('online') ? 'Oui' : 'Non';
     }
 
-    public function getHtmlAttribute()
+	/**
+	 * @return string
+	 */
+    public function getHtmlAttribute(): string
     {
         return Markdown::defaultTransform($this->getAttribute('content'));
     }
@@ -112,6 +117,30 @@ class Post extends Model
                 ->first();
     }
 
+	/**
+	 * @return string
+	 */
+    public function showBadgeToStatus(): string
+	{
+		switch ($this->status) {
+			case Status::ACCEPTED :
+				return 'badge-success';
+				break;
+			case Status::PENDING :
+				return 'badge-warning';
+				break;
+			case Status::REJECT:
+				return 'badge-danger';
+				break;
+			case Status::WRITING:
+				return 'badge-primary';
+				break;
+			default:
+				return 'badge-default';
+				break;
+		}
+	}
+
     /**
      * Add order by created at
      *
@@ -123,4 +152,27 @@ class Post extends Model
     {
         return $query->orderBy('created_at', $order);
     }
+
+	/**
+	 * @return string[]
+	 * @throws ReflectionException
+	 */
+    public function getStatus(): array
+	{
+		$status = [];
+		foreach ((new ReflectionClass(Status::class))->getConstants() as $value) {
+			$status[$value] = $value;
+		}
+		return $status;
+	}
+
+	/**
+	 * true if post status is accpeted
+	 *
+	 * @return bool
+	 */
+	public function statusIsAccepted(): bool
+	{
+		return $this->status === Status::ACCEPTED;
+	}
 }

@@ -10,10 +10,12 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', '360° dev') }}</title>
+    <title>@yield('title') | {{ config('app.name', '360° dev') }}</title>
 
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/mdeditor.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
@@ -47,5 +49,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+<script type="text/javascript" src={{ asset("/js/mdeditor.min.js") }}></script>
+<script type="text/javascript">
+    var md = new MdEditor('#mdeditor', {
+        uploader: false, //'http://local.dev/Lab/MdEditor/app/upload.php?id=',
+        preview: true,
+    });
+</script>
 </body>
 </html>
