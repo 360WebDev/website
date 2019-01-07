@@ -4,8 +4,10 @@ namespace App\Http\Middleware;
 
 use App\Model\Post;
 use Closure;
-use Illuminate\Contracts\Auth\Guard;
 
+/**
+ * Class CheckStatus
+ */
 class CheckStatus
 {
 
