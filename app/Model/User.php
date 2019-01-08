@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Favorite\HasFavorites;
+use App\Traits\HasNotification;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
@@ -17,6 +18,7 @@ class User extends Authenticatable implements HasMedia
     use HasFavorites;
     use Notifiable;
     use HasMediaTrait;
+    use HasNotification;
 
     /**
      * The attributes that are mass assignable.

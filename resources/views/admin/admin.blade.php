@@ -68,7 +68,7 @@
     </li>
 
     <li id="dash_dashboard"><a class="waves-effect" href="{{ route('admin.index') }}"><b>Dashboard</b></a></li>
-    <li id="dash_dashboard"><a class="waves-effect" href="{{ route('home.index') }}" target="_blank"><b>Aller sur le site</b></a></li>
+    <li id="dash_dashboard"><a class="waves-effect" href="{{ route('home.index') }}"><b>Aller sur le site</b></a></li>
 
     <ul class="collapsible" data-collapsible="accordion">
         <li id="dash_users">

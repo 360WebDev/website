@@ -14,6 +14,8 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Support\Facades\Auth;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
@@ -152,5 +154,24 @@ class UsersController extends Controller
 				->with('success', 'Votre article a bien été modifié.');
 		}
 		return \response()->view('users.update_post', compact('form', 'post'));
+	}
+
+	/**
+	 * @param Guard $guard
+	 * @return RedirectResponse
+	 */
+	public function deleteNotifications(Guard $guard): RedirectResponse
+	{
+		$this->getCurrentUser($guard)->notifications()->delete();
+		return redirect()->route('home.index')->with('success', 'Toutes vos notifications ont été supprimées.');
+	}
+
+	/**
+	 * @param Guard $guard
+	 * @return User
+	 */
+	private function getCurrentUser(Guard $guard): User
+	{
+		return $guard->user();
 	}
 }

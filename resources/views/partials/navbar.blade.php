@@ -19,12 +19,38 @@
             <ul class="navbar-nav my-2 my-lg-0">
                 @if (Route::has('login'))
                     @auth
+                        @if(auth()->user()->notifications->isNotEmpty())
+                            <li class="nav-item dropdown mt-2">
+                                <a href="#" class="nav-link dropdown-toggle" id="notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell"></i> <sup><strong>{{ auth()->user()->unreadNotifications->count() }}</strong></sup>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
+                                    @foreach(auth()->user()->notifications as $notification)
+                                        <a
+                                            href="{{ route('posts.edit.notif', [$notification->data['id'], $notification]) }}"
+                                            class="dropdown-item {{ !$notification->read() ? 'active' : 'disabled' }}">{{ $notification->data['title'] }}
+                                        </a>
+                                    @endforeach
+                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ route('user.notif.delete') }}" class="dropdown-item">Tout supprimer</a>
+                                </div>
+                            </li>
+                        @else
+                            <li class="nav-item dropdown mt-2">
+                                <a href="#" class="nav-link dropdown-toggle" id="empty_notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="far fa-bell"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="empty_notifications">
+                                    <p class="dropdown-item">Toutes vos notifications</p>
+                                </div>
+                            </li>
+                        @endif
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="rounded-circle" src="{{ auth()->user()->getAvatarUrl() }}" alt="{{ auth()->user()->name }}">
                                 {{ auth()->user()->name }}
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('user.account') }}">Mon compte</a>
                                 <a class="dropdown-item" href="{{ route('user.favorites') }}">Mes favoris</a>
                                 <a class="dropdown-item" href="{{ route('user.posts') }}">Mes articles</a>
@@ -34,27 +60,6 @@
                                 </form>
                             </div>
                         </li>
-                        @if(auth()->user()->unreadNotifications->isNotEmpty())
-                            <li class="nav-item dropdown mt-2">
-                                <a href="#" class="nav-link dropdown-toggle" id="notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-bell"></i>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="notifications">
-                                    @foreach(auth()->user()->unreadNotifications as $notification)
-                                        <a href="{{ route('posts.edit', $notification->data['id']) }}" class="dropdown-item">{{ $notification->data['title'] }}</a>
-                                    @endforeach
-                                </div>
-                            </li>
-                        @else
-                            <li class="nav-item dropdown mt-2">
-                                <a href="#" class="nav-link dropdown-toggle" id="empty_notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="far fa-bell"></i>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="empty_notifications">
-                                    <p class="dropdown-item">Toutes les notifications</p>
-                                </div>
-                            </li>
-                        @endif
                     @else
                         <li class="nav-item"><a class="nav-link btn btn-outline-success" href="{{ route('login') }}">Se connecter</a></li>
                         <li class="nav-item"><a class="nav-link btn-outline-default" href="{{ route('register') }}">Créer un compte</a></li>

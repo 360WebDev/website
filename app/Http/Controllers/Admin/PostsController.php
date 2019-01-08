@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 use App\Events\PostCreated;
 use App\Forms\Admin\PostsForm;
 use App\Model\Post;
+use App\Model\User;
 use App\Repository\PostRepository;
 use App\Status;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -56,22 +58,27 @@ class PostsController extends AdminController
         return redirect()->back();
     }
 
-    /**
-     * @param int $id
-     * @param PostRepository $postRepository
-     * @return Response
-     * @throws \Exception
-     */
-    public function edit(int $id, PostRepository $postRepository): Response
+	/**
+	 * @param int            $id
+	 * @param PostRepository $postRepository
+	 * @param Guard          $guard
+	 * @param string|null    $notification
+	 * @return Response
+	 * @throws \Exception
+	 */
+    public function edit(int $id, PostRepository $postRepository, Guard $guard, string $notification = null): Response
     {
-        $post = $postRepository->getFirst($id);
+		$post = $postRepository->getFirst($id);
+		/** @var $user User */
+		$user = $guard->user();
+		$user->markAsReadNotification($notification);
         $form = $this->getForm($post);
         return response()->view('admin.posts.edit', compact('post', 'form'));
     }
 
 	/**
-	 * @param Request        $request
-	 * @param Post           $post
+	 * @param Request     $request
+	 * @param Post        $post
 	 * @return View
 	 */
     public function update(Request $request, Post $post)
