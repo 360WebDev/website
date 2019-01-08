@@ -50,9 +50,9 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if ($user && $user->isAdmin()) {
-            return redirect()->route('home.index')->with('success', 'Vous êtes connecté maître.');
+            return back()->with('success', 'Vous êtes connecté maître.');
         }
-        return redirect()->route('home.index')->with('success', 'Vous êtes connecté.');
+        return back()->with('success', 'Vous êtes connecté.');
     }
 
     /**

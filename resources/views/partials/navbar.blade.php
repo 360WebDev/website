@@ -24,13 +24,15 @@
                                 <a href="#" class="nav-link dropdown-toggle" id="notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-bell"></i>
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="notifications">
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
                                     @foreach(auth()->user()->notifications as $notification)
                                         <a
                                             href="{{ route('posts.edit.notif', [$notification->data['id'], $notification]) }}"
-                                            class="dropdown-item {{ !$notification->read() ? 'active' : '' }}">{{ $notification->data['title'] }}
+                                            class="dropdown-item {{ !$notification->read() ? 'active' : 'disabled' }}">{{ $notification->data['title'] }}
                                         </a>
                                     @endforeach
+                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ route('user.notif.delete') }}" class="dropdown-item">Tout supprimer</a>
                                 </div>
                             </li>
                         @else
@@ -39,7 +41,7 @@
                                     <i class="far fa-bell"></i>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="empty_notifications">
-                                    <p class="dropdown-item">Toutes les notifications</p>
+                                    <p class="dropdown-item">Toutes vos notifications</p>
                                 </div>
                             </li>
                         @endif
@@ -48,7 +50,7 @@
                                 <img class="rounded-circle" src="{{ auth()->user()->getAvatarUrl() }}" alt="{{ auth()->user()->name }}">
                                 {{ auth()->user()->name }}
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('user.account') }}">Mon compte</a>
                                 <a class="dropdown-item" href="{{ route('user.favorites') }}">Mes favoris</a>
                                 <a class="dropdown-item" href="{{ route('user.posts') }}">Mes articles</a>

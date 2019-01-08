@@ -58,31 +58,31 @@ class PostsController extends AdminController
         return redirect()->back();
     }
 
-    /**
-     * @param int $id
-     * @param PostRepository $postRepository
-     * @return Response
-     * @throws \Exception
-     */
-    public function edit(int $id, PostRepository $postRepository): Response
+	/**
+	 * @param int            $id
+	 * @param PostRepository $postRepository
+	 * @param Guard          $guard
+	 * @param string|null    $notification
+	 * @return Response
+	 * @throws \Exception
+	 */
+    public function edit(int $id, PostRepository $postRepository, Guard $guard, string $notification = null): Response
     {
-        $post = $postRepository->getFirst($id);
+		$post = $postRepository->getFirst($id);
+		/** @var $user User */
+		$user = $guard->user();
+		$user->markAsReadNotification($notification);
         $form = $this->getForm($post);
         return response()->view('admin.posts.edit', compact('post', 'form'));
     }
 
 	/**
 	 * @param Request     $request
-	 * @param Guard       $guard
 	 * @param Post        $post
-	 * @param string|null $notification
 	 * @return View
 	 */
-    public function update(Request $request, Guard $guard, Post $post, string $notification = null)
+    public function update(Request $request, Post $post)
     {
-    	/** @var $user User */
-    	$user = $guard->user();
-    	$user->markAsReadNotification($notification);
     	$data = $this->getData($request);
     	if (isset($data['online']) && $data['online'] && ($data['status'] !== Status::ACCEPTED)) {
 			return redirect()

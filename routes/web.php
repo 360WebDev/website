@@ -13,9 +13,12 @@
 
 Route::get('/', 'HomeController@index')->name('home.index');
 
+
+// Blog front routes
 Route::resource('blog', 'PostsController');
 Route::get('blog/categorie/{slug}', 'PostsController@category')->name('blog.category');
 
+// User routes
 Route::post('favorite/{post}',     'PostsController@favoritePost');
 Route::post('unfavorite/{post}',   'PostsController@unFavoritePost');
 Route::get('/compte/favorites',    'UsersController@myFavorites')->name('user.favorites')->middleware('auth');
@@ -30,11 +33,13 @@ Route::put('/compte/article/modifier/{post}', 'UsersController@updatePost')
 	->middleware('auth')
 	->middleware(\App\Http\Middleware\CheckStatus::class);
 
+Route::get('/user/notifications/delete', 'UsersController@deleteNotifications')->name('user.notif.delete');
+
 // Admin Dashboard
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], function () {
     Route::get('/', 'DashboardController@index')->name('admin.index');
     Route::resource('posts',      'PostsController');
-    Route::get('/posts/{post}/edit/notification/{notification}', 'PostsController@update')->name('posts.edit.notif');
+    Route::get('/posts/{post}/edit/notification/{notification}', 'PostsController@edit')->name('posts.edit.notif');
     Route::resource('categories', 'CategoriesController');
     Route::resource('users',      'UserController');
     Route::resource('roles',      'RoleController');
