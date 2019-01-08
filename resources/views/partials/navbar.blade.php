@@ -22,7 +22,7 @@
                         @if(auth()->user()->notifications->isNotEmpty())
                             <li class="nav-item dropdown mt-2">
                                 <a href="#" class="nav-link dropdown-toggle" id="notifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-bell"></i>
+                                    <i class="fas fa-bell"></i> <sup><strong>{{ auth()->user()->unreadNotifications->count() }}</strong></sup>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notifications">
                                     @foreach(auth()->user()->notifications as $notification)

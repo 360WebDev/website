@@ -162,11 +162,7 @@ class UsersController extends Controller
 	 */
 	public function deleteNotifications(Guard $guard): RedirectResponse
 	{
-		/** @var $notifications DatabaseNotificationCollection */
-		$notifications = $this->getCurrentUser($guard)->notifications;
-		$notifications->map(function (DatabaseNotification $notification) {
-			$notification->delete();
-		});
+		$this->getCurrentUser($guard)->notifications()->delete();
 		return redirect()->route('home.index')->with('success', 'Toutes vos notifications ont été supprimées.');
 	}
 
