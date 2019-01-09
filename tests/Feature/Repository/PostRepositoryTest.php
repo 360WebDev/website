@@ -7,9 +7,8 @@ use App\Model\Post;
 use App\Model\Role;
 use App\Model\User;
 use App\Repository\PostRepository;
-use App\Status;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostRepositoryTest extends TestCase
@@ -59,6 +58,47 @@ class PostRepositoryTest extends TestCase
 		$post = $postRepository->saveUserPost($data, $userAdmin);
 
 		$this->assertEquals('accepted', $post->status);
+	}
+
+	/** @test */
+	public function post_update()
+	{
+		$post1 = factory(Post::class)->create(['name' => 'Premier article', 'content' => 'content 1']);
+		$post2 = factory(Post::class)->create(['name' => 'Second article', 'content' => 'content 2']);
+		$post3 = factory(Post::class)->create(['name' => 'dernier article', 'content' => 'content 3']);
+
+		$postRepository = new PostRepository(new Post);
+		$data = [
+			'name' => 'Premier article',
+			'slug' => 'foo',
+			'content' => 'foobar',
+		];
+
+		$post1 = $postRepository->update($data, $post1->id);
+
+
+		$this->assertEquals('foobar', $post1->content);
+		$this->assertEquals('content 2', $post2->content);
+		$this->assertEquals('content 3', $post3->content);
+	}
+
+	/**
+	 * @test
+	 */
+	public function update_post_who_not_exist()
+	{
+		factory(Post::class, 4)->create();
+
+		$postRepository = new PostRepository(new Post);
+		$data = [
+			'name' => 'Premier article',
+			'slug' => 'foo',
+			'content' => 'foobar',
+		];
+
+		$this->expectException(ModelNotFoundException::class);
+		$postRepository->update($data, 256);
+
 	}
 
 }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Model\Post;
@@ -42,13 +44,19 @@ class PostRepository extends Repository
         return $this->model->newQuery()->findOrFail($id);
     }
 
-    /**
-     * @param array $data
-     * @return int
-     */
-    public function update(array $data): int
+	/**
+	 * @param array $attributes
+	 * @param int   $id
+	 * @return Post
+	 */
+    public function update(array $attributes, int $id): Post
     {
-        return $this->model->newQuery()->update($data);
+    	/** @var $post Post */
+    	$post = $this->model->newQuery()->findOrFail($id);
+    	$post->fill($attributes);
+    	$post->save();
+
+    	return $post;
     }
 
 	/**
@@ -81,10 +89,10 @@ class PostRepository extends Repository
 	/**
 	 * @param string[] $data
 	 * @param User     $user
-	 * @param bool     $update
-	 * @return Model|int
+	 * @param int|null $id
+	 * @return Model
 	 */
-	public function saveUserPost(array $data, User $user, bool $update = false)
+	public function saveUserPost(array $data, User $user, ?int $id = null): Model
 	{
 		$isAdmin = $user->isAdmin();
 		if ((isset($data['validated']) && $data['validated']) && !$isAdmin) {
@@ -97,6 +105,6 @@ class PostRepository extends Repository
 		unset($data['validated']);
 		$data['online'] = false;
 		$data['user_id'] = $user->id;
-		return $update ? $this->update($data) : $this->save($data);
+		return $id ? $this->update($data, $id) : $this->save($data);
 	}
 }

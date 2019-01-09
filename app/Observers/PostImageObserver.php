@@ -95,7 +95,7 @@ class PostImageObserver
         /** @var $image UploadedFile */
         $image       = $post->image;
         $post->image = $post->getImageName($image);
-        $this->postRepository->update(['image' => $post->image]);
+        $this->postRepository->update(['image' => $post->image], $post->id);
         foreach ($this->sizes as $type => [$width, $height]) {
             $this->imageManager->make($image)
                 ->fit($width, $height)

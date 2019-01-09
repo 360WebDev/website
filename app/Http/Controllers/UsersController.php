@@ -10,12 +10,11 @@ use App\Model\User;
 use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use App\Services\DiscordService;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Support\Facades\Auth;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded;
@@ -141,7 +140,7 @@ class UsersController extends Controller
 		$form = $formBuilder->create(UserPostForm::class, ['model' => $post, 'method' => 'PUT']);
 		if ($request->getMethod() === 'PUT') {
 			$form->redirectIfNotValid();
-			$this->postRepository->saveUserPost($form->getFieldValues(), $user, true);
+			$this->postRepository->saveUserPost($request->all(), $user, $post->id);
 			if ($request->exists('validated')) {
 				// Send notification only for admin
 				$usersAdmin = $this->userRepository->findAllAdmin();
@@ -168,7 +167,7 @@ class UsersController extends Controller
 
 	/**
 	 * @param Guard $guard
-	 * @return User
+	 * @return User|Authenticatable
 	 */
 	private function getCurrentUser(Guard $guard): User
 	{
