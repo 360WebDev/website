@@ -12,21 +12,6 @@ use Illuminate\Database\Eloquent\Collection;
 class UserRepository extends Repository
 {
 
-    /**
-     * @var User
-     */
-    protected $model;
-
-    /**
-     * UserRepository constructor
-     *
-     * @param User $user
-     */
-    public function __construct(User $user)
-    {
-        $this->model = $user;
-    }
-
 	/**
 	 * @return Collection
 	 */
@@ -37,4 +22,13 @@ class UserRepository extends Repository
 		})->get();
 	}
 
+	/**
+	 * Specify model class name
+	 *
+	 * @return string
+	 */
+	public function model(): string
+	{
+		return User::class;
+	}
 }

@@ -8,18 +8,14 @@ use App\Model\Category;
  */
 class CategoryRepository extends Repository
 {
-        /**
-         * @var Category
-         */
-    protected $model;
 
-        /**
-         * CategoryRepository constructor
-         *
-         * @param Category $category
-         */
-    public function __construct(Category $category)
-    {
-            $this->model = $category;
-    }
+	/**
+	 * Specify model class name
+	 *
+	 * @return string
+	 */
+	public function model(): string
+	{
+		return Category::class;
+	}
 }

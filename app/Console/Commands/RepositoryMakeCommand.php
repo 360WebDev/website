@@ -101,9 +101,10 @@ class RepositoryMakeCommand extends GeneratorCommand
         }
 
         return [
-            'DummyFullModelClass'  => $modelClass,
-            'DummyShortModelClass' => class_basename($modelClass),
-            'dummyModelVariable'   => lcfirst(class_basename($modelClass)),
+            'DummyFullModelClass'   => $modelClass,
+            'DummyShortModelClass'  => class_basename($modelClass),
+			'DummyShortModelString' => class_basename($modelClass) . '::class',
+            'dummyModelVariable'    => lcfirst(class_basename($modelClass)),
         ];
     }
 }

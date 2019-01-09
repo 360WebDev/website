@@ -5,7 +5,6 @@ namespace Tests\Feature\Roles;
 use App\Model\Role;
 use App\Repository\RoleRepository;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RoleRepositoryTest extends TestCase
@@ -17,10 +16,13 @@ class RoleRepositoryTest extends TestCase
 	 */
 	private $roleRepository;
 
+	/**
+	 * @throws \App\Repository\RepositoryException
+	 */
 	public function setUp()
 	{
 		parent::setUp();
-		$this->roleRepository = new RoleRepository(new Role);
+		$this->roleRepository = new RoleRepository($this->app);
 	}
 
 	public function tearDown()

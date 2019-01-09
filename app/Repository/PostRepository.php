@@ -18,16 +18,6 @@ class PostRepository extends Repository
 {
 
     /**
-     * @var Post
-     */
-    protected $model;
-
-    public function __construct(Post $post)
-    {
-        $this->model = $post;
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function getByOrderDesc(): Collection
@@ -42,21 +32,6 @@ class PostRepository extends Repository
     public function getFirst(int $id): Model
     {
         return $this->model->newQuery()->findOrFail($id);
-    }
-
-	/**
-	 * @param array $attributes
-	 * @param int   $id
-	 * @return Post
-	 */
-    public function update(array $attributes, int $id): Post
-    {
-    	/** @var $post Post */
-    	$post = $this->model->newQuery()->findOrFail($id);
-    	$post->fill($attributes);
-    	$post->save();
-
-    	return $post;
     }
 
 	/**
@@ -106,5 +81,15 @@ class PostRepository extends Repository
 		$data['online'] = false;
 		$data['user_id'] = $user->id;
 		return $id ? $this->update($data, $id) : $this->save($data);
+	}
+
+	/**
+	 * Specify model class name
+	 *
+	 * @return string
+	 */
+	public function model(): string
+	{
+		return Post::class;
 	}
 }

@@ -10,18 +10,8 @@ use DummyFullModelClass;
 class DummyClass extends Repository
 {
 
-    /**
-     * @var DummyShortModelClass
-     */
-    protected $model;
-
-    /**
-     * DummyClass constructor
-     *
-     * @param DummyShortModelClass $dummyModelVariable
-     */
-    public function __construct(DummyShortModelClass $dummyModelVariable)
+    public function model(): string
     {
-        $this->model = $dummyModelVariable;
+    	return DummyShortModelString;
     }
 }
