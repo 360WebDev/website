@@ -10,6 +10,8 @@ class Comment extends Model
     public $timestamps = true;
     
     protected $dates = ['created_at', 'updated_at'];
+
+    protected $fillable = ['id', 'content', 'post_id', 'user_id', 'created_at', 'updated_at'];
     
     /**
      * @return BelongsTo

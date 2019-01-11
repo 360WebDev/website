@@ -52,7 +52,8 @@ class CommentsController extends Controller
             return back()->with('error', 'L\' article n\'existe pas');
         }
 
-        $this->commentRepository->create($request);
+        $request->request->add(['user_id' => auth()->user()->id]);
+        $this->commentRepository->save($request->all());
 
         return redirect($this->urlRedirect);
     }
@@ -66,9 +67,9 @@ class CommentsController extends Controller
      */
     public function update(StoreComment $request) : RedirectResponse
     {
-        $this->authorize('update', Comment::find($request->comment_id));
+        $this->authorize('update', $this->commentRepository->getById($request->comment_id));
 
-        $this->commentRepository->update($request);
+        $this->commentRepository->update($request->all(), $request->comment_id);
 
         return redirect($this->urlRedirect);
     }
@@ -81,9 +82,11 @@ class CommentsController extends Controller
      */
     public function destroy(Request $request) : RedirectResponse
     {
-        $this->authorize('delete', Comment::find($request->comment_id));
+        $comment = $this->commentRepository->getById($request->comment_id);
 
-        $this->commentRepository->delete($request);
+        $this->authorize('delete', $comment);
+
+        $this->commentRepository->delete($comment->id);
 
         return redirect($this->urlRedirect);
     }
