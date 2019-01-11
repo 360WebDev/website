@@ -14,7 +14,7 @@
 
                 <!-- Edit Form -->
                 <form action="{{ route('comment.update', $post->slug) }}" method="post">
-                    {{ csrf_field() }}
+                    @csrf
                     {{ method_field('PUT') }}
                     <div class="form-group">
                         <textarea class="form-control" name="content">{{ $comment->content }}</textarea>
@@ -25,7 +25,7 @@
 
                 <!-- Delete Form -->
                 <form action="{{ route('comment.destroy', $post->slug) }}" method="post">
-                    {{ csrf_field() }}
+                    @csrf
                     {{ method_field('DELETE') }}
                     <input type="hidden" value="{{ $comment->id }}" name="comment_id">
                     <input type="submit" class="btn btn-danger btn-sm" value="Suprimer">

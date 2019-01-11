@@ -33,7 +33,7 @@
                     <h5 class="card-header">Ajouter un commentaire</h5>
                     <div class="card-body" id="comment">
                         <form method="post" action="{{ route('comment.store', $post->slug) }}">
-                            {{ csrf_field() }}
+                            @csrf
                             <input type="hidden" value="{{ $post->id }}" name="post_id">
                             <div class="form-group">
                                 <textarea class="form-control" rows="3" placeholder="Contenu" name="content"></textarea>
