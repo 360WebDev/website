@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Model\User;
 use App\Model\Comment;
+use App\Model\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CommentPolicy
@@ -42,7 +43,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $user->id == $comment->user_id || $user->role != 'membre';
+        return $user->id == $comment->user_id || $user->role != Role::MEMBER;
     }
 
     /**
@@ -54,6 +55,6 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $user->id == $comment->user_id || $user->role != 'membre';
+        return $user->id == $comment->user_id || $user->role != Role::MEMBER;
     }
 }
