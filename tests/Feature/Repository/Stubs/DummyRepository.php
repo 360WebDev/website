@@ -13,6 +13,6 @@ class DummyRepository extends Repository
 	 */
 	public function model(): string
 	{
-		return FooModel::class;
+		return Bar::class;
 	}
 }

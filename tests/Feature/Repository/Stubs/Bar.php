@@ -3,7 +3,11 @@ namespace Tests\Feature\Repository\Stubs;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FooModel extends Model
+class Bar extends Model
 {
+
+	protected $guarded = [];
+
+	public $timestamps = false;
 
 }

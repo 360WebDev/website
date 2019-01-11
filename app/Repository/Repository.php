@@ -60,6 +60,20 @@ abstract class Repository
     }
 
 	/**
+	 * @param int   $id
+	 * @param array $columns
+	 * @return \Illuminate\Database\Eloquent\Collection|Model
+	 * @throws RepositoryException
+	 */
+    public function find(int $id, array $columns = ['*'])
+	{
+		$model = $this->model->newQuery()->findOrFail($id, $columns);
+		$this->resetModel();
+
+		return $model;
+	}
+
+	/**
 	 * @param array $attributes
 	 * @param int   $id
 	 * @return Model
