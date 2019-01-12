@@ -28,52 +28,31 @@
             <hr>
 
             <!-- Comments Form -->
-            <div class="card my-4">
-                <h5 class="card-header">Ajouter un commentaire</h5>
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3" placeholder="Contenu"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Ajouter</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Single Comment -->
-            <div class="media mb-4">
-                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                <div class="media-body">
-                    <h5 class="mt-0">Nom du commentaire</h5>
-                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                </div>
-            </div>
-
-            <!-- Comment with nested comments -->
-            {{--<div class="media mb-4">
-                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                <div class="media-body">
-                    <h5 class="mt-0">Commenter Name</h5>
-                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-
-                    <div class="media mt-4">
-                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                        <div class="media-body">
-                            <h5 class="mt-0">Commenter Name</h5>
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        </div>
+            @if(!Auth::guest())
+                <div class="card my-4">
+                    <h5 class="card-header">Ajouter un commentaire</h5>
+                    <div class="card-body" id="comment">
+                        <form method="post" action="{{ route('comment.store', $post->slug) }}">
+                            @csrf
+                            <input type="hidden" value="{{ $post->id }}" name="post_id">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" placeholder="Contenu" name="content"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </form>
                     </div>
-
-                    <div class="media mt-4">
-                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                        <div class="media-body">
-                            <h5 class="mt-0">Commenter Name</h5>
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        </div>
-                    </div>
-
                 </div>
-            </div>--}}
+            @else
+                <p>Vous devez être inscrit afin poster un commentaire - <a href="{{ route('register') }}">Créer un compte</a></p>
+            @endif
+
+            <!-- Comments List -->
+            @include('partials/comments')
+
+            <!-- Pagination -->
+            <ul class="pagination justify-content-center mb-4">
+                {{ $comments->links() }}
+            </ul>
 
         </div>
     @include('partials/sidebar')

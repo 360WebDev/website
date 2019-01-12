@@ -98,7 +98,16 @@ abstract class Repository
     public function save(array $data): Model
     {
         return $this->model->newQuery()->create($data);
-    }
+	}
+	
+	/**
+     * @param int $id
+     * @return Model
+     */
+	public function delete(int $id) : bool
+	{
+		return $this->model->newQuery()->findOrFail($id)->delete();
+	}
 
     /**
      * Count elements
