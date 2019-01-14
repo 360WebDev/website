@@ -13,7 +13,7 @@ trait HasNotification
 	 * @param string $id
 	 * @return void
 	 */
-	public function markAsReadNotification(string $id): void
+	public function markAsReadNotification(?string $id): void
 	{
 		/** @var $notification DatabaseNotification */
 		$notification = $this->notifications()->where('id', $id)->first();

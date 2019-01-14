@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Cache;
@@ -99,11 +100,12 @@ abstract class Repository
     {
         return $this->model->newQuery()->create($data);
 	}
-	
+
 	/**
-     * @param int $id
-     * @return Model
-     */
+	 * @param int $id
+	 * @return boolean
+	 * @throws Exception
+	 */
 	public function delete(int $id) : bool
 	{
 		return $this->model->newQuery()->findOrFail($id)->delete();

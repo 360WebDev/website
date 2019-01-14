@@ -4,6 +4,7 @@ namespace Tests\Feature\Roles;
 
 use App\Model\Role;
 use App\Repository\RoleRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -47,10 +48,8 @@ class RoleRepositoryTest extends TestCase
 	 */
 	public function get_role_is_not_exist()
 	{
-		$roleMember = $this->roleRepository->getBySlug('foo');
-
-		$this->assertEquals(0, Role::count());
-		$this->assertNull($roleMember);
+		$this->expectException(ModelNotFoundException::class);
+		$this->roleRepository->getBySlug('foo');
 	}
 
 	/**

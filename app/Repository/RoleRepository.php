@@ -2,6 +2,7 @@
 namespace App\Repository;
 
 use App\Model\Role;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Role repository
@@ -14,7 +15,7 @@ class RoleRepository extends Repository
      * Retreives the role by slug, if not slug in the bdd => create default role who is member
      *
      * @param string $slug
-     * @return Role|null
+     * @return Role|null|Model
      */
     public function getBySlug(string $slug): ?Role
     {
@@ -27,7 +28,7 @@ class RoleRepository extends Repository
                 'description' => 'The default user role'
             ]);
         }
-        return $this->model->newQuery()->where('slug', $slug)->first();
+        return parent::getBySlug($slug);
     }
 
 	/**
