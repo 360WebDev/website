@@ -53,13 +53,18 @@ class UserPostForm extends Form
 
 		// Display online checkbox only for admin
 		if ($this->guard->user()->isAdmin()) {
-			$this->add('online', Field::CHECKBOX, ['label' => 'En ligne ?']);
+			$this->add(
+				'online', Field::CHECKBOX,
+				['label' => 'En ligne ?', 'attr' => ['checked' => $this->getModel()->online]]
+			);
 		}
-
-		$checked = $this->getModel()->status === Status::PENDING;
-		$this->add('validated', Field::CHECKBOX,
-			['label' => 'Soumettre à la validation ?', 'attr' => ['checked' => $checked]]
-		);
+		else {
+			// Not admin (for member)
+			$checked = $this->getModel()->status === Status::PENDING;
+			$this->add('validated', Field::CHECKBOX,
+				['label' => 'Soumettre à la validation ?', 'attr' => ['checked' => $checked]]
+			);
+		}
 
 		$this->add('submit', 'submit', [
 			'label' => 'Enregistrer',

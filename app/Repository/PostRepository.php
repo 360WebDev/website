@@ -66,6 +66,7 @@ class PostRepository extends Repository
 	 * @param User     $user
 	 * @param int|null $id
 	 * @return Model
+	 * @throws RepositoryException
 	 */
 	public function saveUserPost(array $data, User $user, ?int $id = null): Model
 	{
@@ -78,7 +79,7 @@ class PostRepository extends Repository
 			$data['status'] = Status::WRITING;
 		}
 		unset($data['validated']);
-		$data['online'] = false;
+		$data['online'] = $isAdmin;
 		$data['user_id'] = $user->id;
 		return $id ? $this->update($data, $id) : $this->save($data);
 	}
