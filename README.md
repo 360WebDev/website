@@ -73,3 +73,8 @@ Diagramme UML du projet : http://www.laravelsd.com/share/smezUK (pas encore déf
 
 Pour contribuer il faut respecter les normes de commit et de convensions de codage décris dans le 
 CONTRIBUTING.md.
+
+## Liste des documentations des librairies utilisées
+
+- https://docs.spatie.be/laravel-medialibrary/v7/introduction
+- http://kristijanhusak.github.io/laravel-form-builder/
