@@ -24,7 +24,7 @@ $factory->define(App\Model\Post::class, function (Faker $faker) {
         'content'     => $faker->text(1000),
         'image'       => null, //$faker->image(public_path('posts')),
         'online'      => false,
-        'category_id' => rand(1, 10),
+        'category_id' => $category,
         'user_id'     => rand(1,15),
     ];
 });
