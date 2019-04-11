@@ -12,7 +12,7 @@ class PostsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         factory(\App\Model\Post::class, 10)->create();
     }

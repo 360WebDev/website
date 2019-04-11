@@ -1,5 +1,7 @@
 <?php
 
+use App\Model\Category;
+use App\Model\User;
 use Faker\Generator as Faker;
 
 /*
@@ -15,8 +17,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Model\Post::class, function (Faker $faker) {
 
-	$role     = \App\Model\User::inRandomOrder()->first();
-	$category = \App\Model\Category::inRandomOrder()->first();
+	$role     = User::inRandomOrder()->first();
+	$category = Category::inRandomOrder()->first();
 
     return [
         'name'        => $faker->name,
@@ -24,7 +26,7 @@ $factory->define(App\Model\Post::class, function (Faker $faker) {
         'content'     => $faker->text(1000),
         'image'       => null, //$faker->image(public_path('posts')),
         'online'      => false,
-        'category_id' => $category,
+        'category_id' => function () { return factory(Category::class)->create()->id; },
         'user_id'     => rand(1,15),
     ];
 });
